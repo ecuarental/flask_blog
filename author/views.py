@@ -11,7 +11,7 @@ def login():
     return 'Hello, user!'
 
 
-@app.route('/register', methods=('GET', 'POST'))
+@app.route('/register', methods=['GET', 'POST'])
 def register():
     """Register form."""
     form = RegisterForm()
