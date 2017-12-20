@@ -16,7 +16,7 @@ def register():
     """Register form."""
     form = RegisterForm()
     if form.validate_on_submit():
-        return redirect(url_for('sucess'))
+        return redirect(url_for('success'))
     return render_template('author/register.html', form=form)
 
 
