@@ -5,21 +5,23 @@ from flask import render_template, redirect, flash, url_for
 from blog.form import SetupForm
 from author.models import Author
 from blog.models import Blog
+from author.decorators import login_required
 
 
 @app.route('/')
 @app.route('/index')
 def index():
     """Homepage."""
+    blogs = Blog.query.count()
+    if blogs == 0:
+        return redirect(url_for('setup'))
     return "Hello World!"
 
 
 @app.route("/admin")
+@login_required
 def admin():
     """Administration Form."""
-    blogs = Blog.query.count()
-    if blogs == 0:
-        return redirect(url_for('setup'))
     return render_template('blog/admin.html')
 
 
@@ -56,4 +58,4 @@ def setup():
             db.session.rollback()
             error = "Error creating blog"
 
-    return render_template('blog/setup.html', form=form)
+    return render_template('blog/setup.html', form=form, error=error)
