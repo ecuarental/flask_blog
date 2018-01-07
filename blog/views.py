@@ -6,6 +6,7 @@ from blog.form import SetupForm
 from author.models import Author
 from blog.models import Blog
 from author.decorators import login_required
+import bcrypt
 
 
 @app.route('/')
@@ -28,14 +29,16 @@ def admin():
 @app.route('/setup', methods=['GET', 'POST'])
 def setup():
     """Define the setup form."""
-    error = ""
     form = SetupForm()
+    error = ""
     if form.validate_on_submit():
+        salt = bcrypt.gensalt()
+        hashed_password = bcrypt.hashpw(form.password.data, salt)
         author = Author(
             form.fullname.data,
             form.email.data,
             form.username.data,
-            form.password.data,
+            hashed_password,
             True
         )
         db.session.add(author)
